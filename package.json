@@ -1,0 +1,28 @@
+{
+  "name": "web-hid-polyfill",
+  "version": "0.0.0",
+  "description": "",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [
+    "webhid",
+    "hid",
+    "polyfill"
+  ],
+  "author": "Thibaut Maréchal",
+  "license": "ISC",
+  "devDependencies": {
+    "@total-typescript/tsconfig": "^1.0.4",
+    "@types/w3c-web-hid": "^1.0.6",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2"
+  }
+}

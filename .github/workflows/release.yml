@@ -1,0 +1,54 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: "Type of release"
+        default: 'patch'
+        required: false
+        type: choice
+        options:
+          - "major"
+          - "minor"
+          - "patch"
+          - "premajor"
+          - "preminor"
+          - "prepatch"
+          - "prerelease"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build
+        run: pnpm run build
+      - name: Git status
+        run: git status
+      - name: Git status
+        run: git diff
+      - name: Bump version
+        run: |
+          git config --global user.email "github@thibautmarechal.be"
+          git config --global user.name "Thibaut Maréchal"
+          pnpm version ${{ github.event.inputs.release_type }}
+      - name: Publish
+        run: |
+          npm set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+          pnpm publish
+      - name: Push tags
+        run: git push --follow-tags
